@@ -16,7 +16,6 @@ export default function ProfilePage() {
     const [followingUsers, setFollowingUsers] = useState(null);
     const [currentId, setCurrentId] = useState(id);
 
-
     useEffect(()=> {
 
         window.scrollTo(0, 0);
@@ -78,7 +77,6 @@ export default function ProfilePage() {
                 const body = { userFollowId: currentId };
                 apiFollow.followUser(body,token)
                 .then( res => {
-                    console.log("Comecei a seguir")
                     const myFollowers = res.data.myFollowers || [];
                     setFollowingUsers(myFollowers.map(v => v.id));
                     window.location.reload();
@@ -90,7 +88,6 @@ export default function ProfilePage() {
             } else {
                 apiFollow.unfollowUser(id,token)
                 .then( res => {
-                    console.log("Deixei de seguir")
                         const myFollowers = res.data.myFollowers || [];
                         setFollowingUsers(myFollowers.map(v => v.id));
                         window.location.reload();
@@ -100,9 +97,6 @@ export default function ProfilePage() {
                 });
             }
       }
-
-      console.log(`Usuário atual: ${idUserToken}, Eu sigo: ${followingUsers}`)
-      console.log(followingUsers?.includes(myTimeLine?.id))
 
     return (
         <HomeContainer>
@@ -141,7 +135,9 @@ export default function ProfilePage() {
                     </InfoDate>
                 </UserInfo>
                 <LikesInfo>
-                    <ion-icon name="star-outline"></ion-icon>
+                    <button >
+                        <ion-icon name="star-outline"></ion-icon>
+                    </button>
                     <p>{
                     likes !== null ? 
                     (likes.length >1 ? (
@@ -329,6 +325,7 @@ const LikesInfo = styled.div`
     display: flex;
     align-items: flex-start;
     padding: 15px;
+    margin-top: 3px;
     gap: 4px;
     box-sizing: border-box;
     color: #ffffff;
@@ -346,6 +343,12 @@ const LikesInfo = styled.div`
         font-size: 26px;
         min-width: 30px;
         margin-top: -7px;
+        color: #ffffff;
+    }
+    button {
+        background-color: transparent;
+        border: 0;
+        padding: 0;
     }
 `;
 const DescriptionP = styled.p`

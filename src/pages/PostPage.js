@@ -1,21 +1,61 @@
 import styled from "styled-components";
 import { Footer } from "../components/Footer.js";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import apiPosts from "../services/apiPosts.js";
 
 export default function PostPage() {
+
+    const navigate = useNavigate();
+    const [token, setToken] = useState({});
+    const [form, setForm] = useState({email: "", password: ""});
+
+    function handleForm(e){
+        setForm({...form, [e.target.name]: e.target.value});
+    }
+
+    useEffect(()=> {
+
+		if(localStorage.getItem('user')){
+
+            const {token, idUser} = JSON.parse(localStorage.getItem('user'));
+            setToken({token, idUser});
+            
+        } else {
+            navigate("/signin");
+        }        
+    // eslint-disable-next-line
+	},[]);
+
+    function postImage(e){
+        e.preventDefault();        
+
+        const body = {
+            photo: form.photo,
+            description: form.description
+        };
+        apiPosts.postImage(body, token.token)
+            .then( res => {
+                navigate("/");
+            })
+            .catch( err => {
+                alert(`Erro: ${err.response.data}`)
+            });
+    }
 
     return (
         <Container>
             <Content>
                 <DivH1>Postar</DivH1>
                 <InternContent>
-                    <form>
-                        <input placeholder="Link da Foto" name="photo" type="text" required/>
-                        <textarea placeholder="Descrição" name="description" type="text" required/>
+                    <form onSubmit={postImage}>
+                        <input placeholder="Link da Foto" name="photo" type="text" value={form.photo} onChange={handleForm} required/>
+                        <textarea placeholder="Descrição" name="description" type="text" value={form.description} onChange={handleForm} required/>
                         <Button><button type="submit">Publicar</button></Button>
                     </form>
                 </InternContent>
             </Content>
-            <Footer />        
+            <Footer myId={token.idUser}/>       
         </Container>
     );
 }
