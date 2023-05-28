@@ -8,7 +8,7 @@ export default function PostPage() {
 
     const navigate = useNavigate();
     const [token, setToken] = useState({});
-    const [form, setForm] = useState({email: "", password: ""});
+    const [form, setForm] = useState({photo: "", description: ""});
 
     function handleForm(e){
         setForm({...form, [e.target.name]: e.target.value});
