@@ -15,5 +15,10 @@ function homePage(token){
     return promise;
 }
 
-const apiHome = { homePage };
+function profile(id, token){
+    const promise = axios.get(`/myposts/${id}`, createConfig(token));
+    return promise;
+}
+
+const apiHome = { homePage, profile };
 export default apiHome;

@@ -1,79 +1,126 @@
 import styled from "styled-components";
 import { Footer } from "../components/Footer.js";
+import { useNavigate, useParams } from "react-router";
+import { useEffect,useState } from "react";
+import apiHome from "../services/apiHome.js";
+import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 
 export default function ProfilePage() {
+
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [idUserToken, setIdUserToken] = useState({});
+    const [myTimeLine, setMyTimeLine] = useState(null);
+    const [currentId, setCurrentId] = useState(id);
+
+    useEffect(()=> {
+		if(localStorage.getItem('user')){
+            const {token, idUser} = JSON.parse(localStorage.getItem('user'));
+            setIdUserToken(idUser);
+            apiHome.profile(id, token)
+                .then( res => {
+                    setMyTimeLine(res.data);
+                })
+                .catch( err => {
+                    alert(`Erro: ${err.response.data}`)
+                });
+    } else {
+        navigate("/signin");
+    }// eslint-disable-next-line
+	},[]);
+
+    useEffect(() => {
+        if (currentId !== id) {
+          setCurrentId(id);
+          window.scrollTo(0, 0);
+          apiHome.profile(id)
+                .then( res => {
+                    setMyTimeLine(res.data);
+                })
+                .catch( err => {
+                    alert(`Erro: ${err.response.data}`)
+                });
+        }
+      }, [id, currentId]);
 
     return (
         <HomeContainer>
             <MyInfos>
                 <InfoLeft>
-                    <img alt="profile" src="https://blog.unyleya.edu.br/wp-content/uploads/2017/12/saiba-como-a-educacao-ajuda-voce-a-ser-uma-pessoa-melhor.jpeg"/>
+                    <img 
+                    alt={myTimeLine?.name} 
+                    src={myTimeLine?.photo || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"} 
+                    />
                 </InfoLeft>
                 <InfoRight>
-                    <h2>Manoela Joaquina</h2>
-                    <h3>Esta é a minha biografia que falo um pouco sobre minha pessoa. Gosto muito disso.</h3>
+                    <h2>{myTimeLine?.name}</h2>
+                    <h3>{myTimeLine?.biography}</h3>
                     <ButtonsInfos>
-                        <button>Seguidores</button>
-                        <button>Seguindo</button>
+                        <LinkIds to={`/followers/${id}`}>
+                            <button>Seguidores</button>
+                        </LinkIds>
+                        <LinkIds to={`/following/${id}`}>
+                            <button>Seguindo</button>
+                        </LinkIds>
                     </ButtonsInfos>
                 </InfoRight>
             </MyInfos>
-            <Content>
+            {!myTimeLine?.posts 
+            ? `${myTimeLine?.name} ainda não fez publicações.`
+            : myTimeLine?.posts.map(({id, photo, description, createdAt, likes, comments}) => (
+            <Content key={id}>
                 <span></span>
-                <img alt="post" src="https://blog.xpeducacao.com.br/wp-content/uploads/2022/08/praia-como-adicionar-imagem-html-1024x685.jpg"/>
+                <img alt="post" src={photo}/>
                 <UserInfo>
                     <InfoDate>
-                        <h3>23/05/2023 às 20h03</h3>
+                        <h3>{dayjs(createdAt).format('DD/MM/YYYY')} às {dayjs(createdAt).format('HH:mm')}</h3>
                     </InfoDate>
                 </UserInfo>
                 <LikesInfo>
-                    <ion-icon name="heart-outline"></ion-icon>
-                    <p>Curtido por Natalia Benfica e outras 57 pessoas.</p>
+                    <ion-icon name="star-outline"></ion-icon>
+                    <p>{
+                    likes !== null ? 
+                    (likes.length >1 ? (
+                        <>
+                          Curtido por 
+                            <LinkIds to={`/profile/${likes[likes.length-1].id}`}>
+                                {` ${likes[likes.length-1].name}`}
+                            </LinkIds> e mais {likes.length - 1} {likes.length === 2 ? "pessoa" : "pessoas"}
+                        </>
+                      )
+                      : <>
+                        Curtido por 
+                            <LinkIds to={`/profile/${likes[likes.length-1].id}`}>
+                                {` ${likes[likes.length-1].name}`}
+                            </LinkIds>
+                        </>)
+                    : "Ninguém curtiu ainda."
+                    }</p>
                 </LikesInfo>
-                <DescriptionP>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</DescriptionP>
+                <DescriptionP>{description}</DescriptionP>
                 <CommentsInfo>
                     <textarea placeholder="Comentar algo" name="comment"  type="text" required/>
                     <ion-icon name="paper-plane"></ion-icon>
-                    <CommentInt>
-                        <img alt="profile" src="https://www.rhportal.com.br/wp-content/uploads/shutterstock_1874708293.jpg"/>
-                        <p>dsaj sdajdsa kjadsk adsasd dkds kjfdskjf ksfdj ksfdj fsdkjsfdkfjds kfdsj kfdsjsfdk jsfdk fsdjksdfj kfds </p>
+                    {comments !== null && comments.map(({commentId, comment, userName, userId, userPhoto}) => (
+                    <CommentInt key={commentId}>
+                        <LinkIds to={`/profile/${userId}`}>
+                            <img alt={userName} src={userPhoto}/>
+                        </LinkIds>
+                        <p>{comment}</p>
                     </CommentInt>
-                    <CommentInt>
-                        <img alt="profile" src="https://www.vittude.com/blog/wp-content/uploads/otimismo-3.jpg"/>
-                        <p>dsaj sdajdsa kjadsk adsasd dkds kjfdskjf ksfdj ksfdj fsdkjsfdkfjds kfdsj kfdsjsfdk jsfdk fsdjksdfj kfds </p>
-                    </CommentInt>
+                    ))}                    
                 </CommentsInfo>
             </Content>
-            <Content>
-                <span></span>
-                <img alt="post" src="https://static-cse.canva.com/blob/611603/screen3.jpg"/>
-                <UserInfo>
-                   <InfoDate>
-                        <h3>23/05/2023 às 20h03</h3>
-                    </InfoDate>
-                </UserInfo>
-                <LikesInfo>
-                    <ion-icon name="heart-outline"></ion-icon>
-                    <p>Curtido por Natalia Benfica e outras 57 pessoas.</p>
-                </LikesInfo>
-                <DescriptionP>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</DescriptionP>
-                <CommentsInfo>
-                    <textarea placeholder="Comentar algo" name="comment"  type="text" required/>
-                    <ion-icon name="paper-plane"></ion-icon>
-                    <CommentInt>
-                        <img alt="profile" src="https://www.arita.com.br/wp-content/uploads/2020/08/pessoa-expansiva-principais-caracteristicas-desta-personalidade.jpg"/>
-                        <p>dsaj sdajdsa kjadsk adsasd dkds kjfdskjf ksfdj ksfdj fsdkjsfdkfjds kfdsj kfdsjsfdk jsfdk fsdjksdfj kfds </p>
-                    </CommentInt>
-                    <CommentInt>
-                        <img alt="profile" src="https://www.al.sp.gov.br/repositorio/deputadoPortal/fotos/20230315-170849-id=1649-PEQ.jpeg"/>
-                        <p>dsaj sdajdsa kjadsk adsasd dkds kjfdskjf ksfdj ksfdj fsdkjsfdkfjds kfdsj kfdsjsfdk jsfdk fsdjksdfj kfds </p>
-                    </CommentInt>
-                </CommentsInfo>
-            </Content>
-            <Footer />        
+            ))}
+            <Footer myId={idUserToken}/>
         </HomeContainer>
     );
 }
+const LinkIds = styled(Link)`
+    text-decoration: none;
+    color: #ffffff;
+`;
 const HomeContainer = styled.div`
     width: 100%;
     margin-top: 70px;
@@ -97,7 +144,7 @@ const MyInfos = styled.div`
 const InfoLeft = styled.div`
     display: flex;
     justify-content: flex-start;
-    min-width: 100px;
+    min-width: 90px;
     box-sizing: border-box;
     img {
         width: 70px;
@@ -112,6 +159,7 @@ const InfoRight = styled.div`
     align-items: flex-start;
     gap: 5px;
     box-sizing: border-box;
+    margin-right: 5px;
     h2{
         color: #ffffff;
         font-family: 'Roboto', sans-serif;
@@ -196,7 +244,7 @@ const LikesInfo = styled.div`
     display: flex;
     align-items: flex-start;
     padding: 15px;
-    gap: 10px;
+    gap: 4px;
     box-sizing: border-box;
     color: #ffffff;
     font-family: 'Roboto', sans-serif;
@@ -212,6 +260,7 @@ const LikesInfo = styled.div`
     ion-icon {
         font-size: 26px;
         min-width: 30px;
+        margin-top: -7px;
     }
 `;
 const DescriptionP = styled.p`
@@ -274,5 +323,6 @@ const CommentInt = styled.div`
         font-size: 15px;
         font-weight: 500;
         line-height: 18px;
+        margin-top: 5px;
     }
 `;

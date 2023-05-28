@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import apiHome from "../services/apiHome.js";
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
 
     const navigate = useNavigate();
+    const [idUserToken, setIdUserToken] = useState({});
     const [timeLine, setTimeLine] = useState([]);
       
     useEffect(()=> {
 		if(localStorage.getItem('user')){
-            const {token} = JSON.parse(localStorage.getItem('user'));
-            console.log(token);
+            const {token, idUser} = JSON.parse(localStorage.getItem('user'));
+            setIdUserToken(idUser);
             apiHome.homePage(token)
                 .then( res => {
                     setTimeLine(res.data);
@@ -25,31 +27,46 @@ export default function HomePage() {
         navigate("/signin");
     }// eslint-disable-next-line
 	},[]);
-    console.log(timeLine);
 
     return (
         <HomeContainer>
-            {timeLine.map(({id, photo, description, createdAt, nameUser, photoProfile, likes, comments}) => (
+            {timeLine.map(({id, photo, description, createdAt, idUser, nameUser, photoProfile, likes, comments}) => (
                 <Content key={id}>
                 <span></span>
                 <img alt="post" src={photo}/>
                 <UserInfo>
-                    <img 
-                    alt={nameUser} 
-                    src={photoProfile ? 
-                    photoProfile : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"} 
-                    />
+                    <LinkIds to={`/profile/${idUser}`}>
+                        <img 
+                        alt={nameUser} 
+                        src={photoProfile ? 
+                        photoProfile : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"} 
+                        />
+                    </LinkIds>
                     <InfoDate>
-                        <h2>{nameUser}</h2>
-                        <h3>{dayjs(createdAt).format('DD/MM/YYYY')} às {dayjs(createdAt).format('HH:mm')}</h3>
+                        <LinkIds to={`/profile/${idUser}`}>
+                            <h2>{nameUser}</h2>
+                            <h3>{dayjs(createdAt).format('DD/MM/YYYY')} às {dayjs(createdAt).format('HH:mm')}</h3>
+                        </LinkIds>
                     </InfoDate>
                 </UserInfo>
                 <LikesInfo>
-                    <ion-icon name="heart-outline"></ion-icon>
+                <ion-icon name="star-outline"></ion-icon>
                     <p>{
                     likes !== null ? 
-                    (likes.length >1 ? `Curtido por ${likes[0]} e mais ${likes.length - 1} pessoas.` 
-                    : `Curtido por ${likes[0]}.`)
+                    (likes.length >1 ? (
+                        <>
+                          Curtido por 
+                            <LinkIds to={`/profile/${likes[likes.length-1].id}`}>
+                                {` ${likes[likes.length-1].name}`}
+                            </LinkIds> e mais {likes.length - 1} {likes.length === 2 ? "pessoa" : "pessoas"}
+                        </>
+                      )
+                      : <>
+                        Curtido por 
+                            <LinkIds to={`/profile/${likes[likes.length-1].id}`}>
+                                {` ${likes[likes.length-1].name}`}
+                            </LinkIds>
+                        </>)
                     : "Ninguém curtiu ainda."
                     }</p>
                 </LikesInfo>
@@ -57,19 +74,25 @@ export default function HomePage() {
                 <CommentsInfo>
                     <textarea placeholder="Comentar algo" name="comment"  type="text" required/>
                     <ion-icon name="paper-plane"></ion-icon>
-                    {comments[0].commentId !== null && comments.map(({commentId, comment, userPhoto}) => (
+                    {comments[0].commentId !== null && comments.map(({commentId, comment, userPhoto, userId, userName}) => (
                         <CommentInt key={commentId}>
-                            <img alt="profile" src={userPhoto}/>
+                            <LinkIds to={`/profile/${userId}`}>
+                                <img alt={userName} src={userPhoto}/>
+                            </LinkIds>
                             <p>{comment}</p>
                         </CommentInt>                
                     ))}
                 </CommentsInfo>
             </Content>
             ))}
-            <Footer />        
+            <Footer myId={idUserToken}/>        
         </HomeContainer>
     );
 }
+const LinkIds = styled(Link)`
+    text-decoration: none;
+    color: #ffffff;
+`;
 const HomeContainer = styled.div`
     width: 100%;
     margin-top: 70px;
@@ -150,6 +173,7 @@ const LikesInfo = styled.div`
     ion-icon {
         font-size: 26px;
         min-width: 30px;
+        margin-top: -4px;
     }
     p{
         margin-top: 4px;
@@ -215,5 +239,6 @@ const CommentInt = styled.div`
         font-size: 15px;
         font-weight: 500;
         line-height: 18px;
+        margin-top: 5px;
     }
 `;

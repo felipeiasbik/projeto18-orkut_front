@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export function Footer(){
+export function Footer({myId}){
     return (
         <Context>
             <Link to={"/"}><ion-icon name="home"></ion-icon></Link>
-            <Link to={"/profile/1"}><ion-icon name="person"></ion-icon></Link>
+            <Link key={myId} to={`/profile/${myId}`}><ion-icon name="person"></ion-icon></Link>
             <Link to={"/post"}><ion-icon name="images"></ion-icon></Link>
             <Link to={"/search"}><ion-icon name="search"></ion-icon></Link>
             <Link to={"/signin"}><ion-icon name="log-out"></ion-icon></Link>

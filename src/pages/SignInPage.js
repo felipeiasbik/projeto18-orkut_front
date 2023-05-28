@@ -20,8 +20,8 @@ export default function SignInPage() {
 
         apiAuth.signIn(body)
             .then( res => {
-                const {token} = res.data;
-                localStorage.setItem("user", JSON.stringify({token}));
+                const {token, idUser} = res.data;
+                localStorage.setItem("user", JSON.stringify({token, idUser}));
                 navigate("/");
             })
             .catch( err => {

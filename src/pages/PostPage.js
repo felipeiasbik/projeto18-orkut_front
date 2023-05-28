@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Footer } from "../components/Footer.js";
 
 export default function PostPage() {
+
     return (
         <Container>
             <Content>

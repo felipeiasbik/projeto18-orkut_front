@@ -4,6 +4,8 @@ import HomePage from "./pages/HomePage.js";
 import SignUpPage from "./pages/SignUpPage.js";
 import SignInPage from "./pages/SignInPage.js";
 import ProfilePage from "./pages/ProfilePage.js";
+import FollowersPage from "./pages/FollowersPage.js";
+import FollowingPage from "./pages/FollowingPage.js";
 import PostPage from "./pages/PostPage.js";
 import Header from "./components/Header.js";
 import SearchPage from "./pages/SearchPage.js";
@@ -18,6 +20,8 @@ export default function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/followers/:id" element={<FollowersPage />} />
+          <Route path="/following/:id" element={<FollowingPage />} />
           <Route path="/post" element={<PostPage />} />
           <Route path="/search" element={<SearchPage />} />
         </Routes>
