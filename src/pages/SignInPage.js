@@ -2,12 +2,21 @@ import styled from "styled-components";
 import { Footer } from "../components/Footer.js";
 import { Link, useNavigate } from "react-router-dom";
 import apiAuth from "../services/apiAuth.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function SignInPage() {
 
     const [form, setForm] = useState({email: "", password: ""});
     const navigate = useNavigate();
+
+    const [token, setToken] = useState({});
+      
+    useEffect(()=> {
+		if(localStorage.getItem('user')){
+            const {token, idUser} = JSON.parse(localStorage.getItem('user'));
+            setToken({token, idUser});
+    }// eslint-disable-next-line
+	},[]);
 
     function handleForm(e){
         setForm({...form, [e.target.name]: e.target.value});
@@ -45,7 +54,7 @@ export default function SignInPage() {
                     </Login>
                 </InternContent>
             </Content>
-            <Footer />        
+            <Footer myId={token}/>       
         </Container>
     );
 }

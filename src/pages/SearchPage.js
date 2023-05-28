@@ -43,7 +43,7 @@ export default function SearchPage() {
                 alert(`Erro: ${err.response.data}`)
             });
     }
-    console.log(listSearch)
+    
     return (
         <Container>
             <Content>
@@ -69,7 +69,7 @@ export default function SearchPage() {
                     </LinkIds>
                 ))}
             </ResultsSearch>
-            <Footer myId={token.idUser}/>         
+            <Footer myId={token}/>         
         </Container>
     );
 }

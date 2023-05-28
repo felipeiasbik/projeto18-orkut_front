@@ -55,7 +55,7 @@ export default function PostPage() {
                     </form>
                 </InternContent>
             </Content>
-            <Footer myId={token.idUser}/>       
+            <Footer myId={token}/>       
         </Container>
     );
 }

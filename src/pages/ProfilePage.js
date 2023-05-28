@@ -15,6 +15,7 @@ export default function ProfilePage() {
     const [myTimeLine, setMyTimeLine] = useState(null);
     const [followingUsers, setFollowingUsers] = useState(null);
     const [currentId, setCurrentId] = useState(id);
+    const [tokenA, setTokenA] = useState({});
 
     useEffect(()=> {
 
@@ -23,7 +24,7 @@ export default function ProfilePage() {
 
             const {token, idUser} = JSON.parse(localStorage.getItem('user'));
             setIdUserToken(idUser);
-
+            setTokenA({token, idUser});
             apiHome.profile(id, token)
                 .then( res => {
                     setMyTimeLine(res.data);
@@ -34,6 +35,7 @@ export default function ProfilePage() {
             
             apiFollow.following(idUser, token)
             .then( res => {
+                console.log(res.data);
                 setFollowingUsers(res?.data.following && res.data.following.map(v => v.id));
             })
             .catch( err => {
@@ -52,33 +54,34 @@ export default function ProfilePage() {
 
         if (currentId !== id) {
           setCurrentId(id);
-          apiHome.profile(id)
+          console.log(tokenA.token)
+          apiHome.profile(id, tokenA.token)
                 .then( res => {
                     setMyTimeLine(res.data);
                 })
                 .catch( err => {
                     alert(`Erro: ${err.response.data}`)
                 });
-            apiFollow.following(id)
-            .then( res => {
-                setFollowingUsers(res.data.following && res.data.following.map(v => v.id));
-            })
-            .catch( err => {
-                alert(`Erro: ${err.response.data}`)
-            });
+            // apiFollow.following(id,tokenA.token)
+            // .then( res => {
+            //     setFollowingUsers(res.data.following && res.data.following.map(v => v.id));
+            // })
+            // .catch( err => {
+            //     alert(`Erro: ${err.response.data}`)
+            // });
         }
       }, [id, currentId, followingUsers]);
 
-      function handleClick(){
-        
-        const {token} = JSON.parse(localStorage.getItem('user'));
 
-            if(followingUsers?.includes(myTimeLine?.id) === false){
+      function handleClick(){
+        window.scrollTo(0, 0);
+        console.log(followingUsers)
+            if(followingUsers?.includes(myTimeLine?.id) === false || followingUsers === null){
                 const body = { userFollowId: currentId };
-                apiFollow.followUser(body,token)
+                apiFollow.followUser(body,tokenA.token)
                 .then( res => {
                     const myFollowers = res.data.myFollowers || [];
-                    setFollowingUsers(myFollowers.map(v => v.id));
+                    // setFollowingUsers(myFollowers.map(v => v.id));
                     window.location.reload();
                 })
                 .catch( err => {
@@ -86,10 +89,10 @@ export default function ProfilePage() {
                 });
 
             } else {
-                apiFollow.unfollowUser(id,token)
+                apiFollow.unfollowUser(id,tokenA.token)
                 .then( res => {
                         const myFollowers = res.data.myFollowers || [];
-                        setFollowingUsers(myFollowers.map(v => v.id));
+                        // setFollowingUsers(myFollowers.map(v => v.id));
                         window.location.reload();
                 })
                 .catch( err => {
@@ -172,7 +175,7 @@ export default function ProfilePage() {
                 </CommentsInfo>
             </Content>
             ))}
-            <Footer myId={idUserToken}/>
+            {tokenA.token && tokenA.idUser && <Footer myId={tokenA} />}
         </HomeContainer>
     );
 }

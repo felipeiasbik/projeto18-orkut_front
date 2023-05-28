@@ -9,14 +9,14 @@ export default function HomePage() {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const [idUserToken, setIdUserToken] = useState({});
     const [myTimeLine, setMyTimeLine] = useState(null);
     const [currentId, setCurrentId] = useState(id);
+    const [token, setToken] = useState({});
       
     useEffect(()=> {
 		if(localStorage.getItem('user')){
             const {token, idUser} = JSON.parse(localStorage.getItem('user'));
-            setIdUserToken(idUser);
+            setToken({token, idUser});
             apiFollow.myfollowers(id, token)
                 .then( res => {
                     setMyTimeLine(res.data);
@@ -79,7 +79,7 @@ export default function HomePage() {
                     </FollowList>
                 ))}
             </Content>
-            <Footer myId={idUserToken}/>        
+            <Footer myId={token}/>        
         </HomeContainer>
     );
 }

@@ -9,13 +9,13 @@ import { Link } from "react-router-dom";
 export default function HomePage() {
 
     const navigate = useNavigate();
-    const [idUserToken, setIdUserToken] = useState({});
     const [timeLine, setTimeLine] = useState([]);
+    const [token, setToken] = useState({});
       
     useEffect(()=> {
 		if(localStorage.getItem('user')){
             const {token, idUser} = JSON.parse(localStorage.getItem('user'));
-            setIdUserToken(idUser);
+            setToken({token, idUser});
             apiHome.homePage(token)
                 .then( res => {
                     setTimeLine(res.data);
@@ -85,7 +85,7 @@ export default function HomePage() {
                 </CommentsInfo>
             </Content>
             ))}
-            <Footer myId={idUserToken}/>        
+            <Footer myId={token}/>        
         </HomeContainer>
     );
 }
