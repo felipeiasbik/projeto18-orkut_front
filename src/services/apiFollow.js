@@ -20,5 +20,15 @@ function following(id, token){
     return promise;
 }
 
-const apiFollow = { myfollowers, following };
+function followUser(body,token){
+    const promise = axios.post(`/follow`, body, createConfig(token));
+    return promise;
+}
+
+function unfollowUser(id,token){
+    const promise = axios.delete(`/follow/${id}`, createConfig(token));
+    return promise;
+}
+
+const apiFollow = { myfollowers, following, followUser, unfollowUser };
 export default apiFollow;

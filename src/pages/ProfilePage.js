@@ -5,6 +5,7 @@ import { useEffect,useState } from "react";
 import apiHome from "../services/apiHome.js";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import apiFollow from "../services/apiFollow.js";
 
 export default function ProfilePage() {
 
@@ -12,12 +13,18 @@ export default function ProfilePage() {
     const navigate = useNavigate();
     const [idUserToken, setIdUserToken] = useState({});
     const [myTimeLine, setMyTimeLine] = useState(null);
+    const [followingUsers, setFollowingUsers] = useState(null);
     const [currentId, setCurrentId] = useState(id);
 
+
     useEffect(()=> {
+
+        window.scrollTo(0, 0);
 		if(localStorage.getItem('user')){
+
             const {token, idUser} = JSON.parse(localStorage.getItem('user'));
             setIdUserToken(idUser);
+
             apiHome.profile(id, token)
                 .then( res => {
                     setMyTimeLine(res.data);
@@ -25,15 +32,27 @@ export default function ProfilePage() {
                 .catch( err => {
                     alert(`Erro: ${err.response.data}`)
                 });
-    } else {
-        navigate("/signin");
-    }// eslint-disable-next-line
+            
+            apiFollow.following(idUser, token)
+            .then( res => {
+                setFollowingUsers(res?.data.following && res.data.following.map(v => v.id));
+            })
+            .catch( err => {
+                alert(`Erro: ${err.response.data}`)
+            });
+            
+        } else {
+            navigate("/signin");
+        }        
+    // eslint-disable-next-line
 	},[]);
 
     useEffect(() => {
+
+        window.scrollTo(0, 0);
+
         if (currentId !== id) {
           setCurrentId(id);
-          window.scrollTo(0, 0);
           apiHome.profile(id)
                 .then( res => {
                     setMyTimeLine(res.data);
@@ -41,8 +60,49 @@ export default function ProfilePage() {
                 .catch( err => {
                     alert(`Erro: ${err.response.data}`)
                 });
+            apiFollow.following(id)
+            .then( res => {
+                setFollowingUsers(res.data.following && res.data.following.map(v => v.id));
+            })
+            .catch( err => {
+                alert(`Erro: ${err.response.data}`)
+            });
         }
-      }, [id, currentId]);
+      }, [id, currentId, followingUsers]);
+
+      function handleClick(){
+        
+        const {token} = JSON.parse(localStorage.getItem('user'));
+
+            if(followingUsers?.includes(myTimeLine?.id) === false){
+                const body = { userFollowId: currentId };
+                apiFollow.followUser(body,token)
+                .then( res => {
+                    console.log("Comecei a seguir")
+                    const myFollowers = res.data.myFollowers || [];
+                    setFollowingUsers(myFollowers.map(v => v.id));
+                    window.location.reload();
+                })
+                .catch( err => {
+                    alert(`Erro: ${err.response.data}`)
+                });
+
+            } else {
+                apiFollow.unfollowUser(id,token)
+                .then( res => {
+                    console.log("Deixei de seguir")
+                        const myFollowers = res.data.myFollowers || [];
+                        setFollowingUsers(myFollowers.map(v => v.id));
+                        window.location.reload();
+                })
+                .catch( err => {
+                    alert(`Erro: ${err.response.data}`)
+                });
+            }
+      }
+
+      console.log(`Usuário atual: ${idUserToken}, Eu sigo: ${followingUsers}`)
+      console.log(followingUsers?.includes(myTimeLine?.id))
 
     return (
         <HomeContainer>
@@ -54,7 +114,10 @@ export default function ProfilePage() {
                     />
                 </InfoLeft>
                 <InfoRight>
-                    <h2>{myTimeLine?.name}</h2>
+                    <NameButton val={!followingUsers?.includes(myTimeLine?.id)}>
+                        <h2>{myTimeLine?.name}</h2>
+                        {idUserToken !== myTimeLine?.id && <button onClick={handleClick}>{!followingUsers?.includes(myTimeLine?.id) ? "Seguir" : "Deixar de seguir"}</button>}
+                    </NameButton>
                     <h3>{myTimeLine?.biography}</h3>
                     <ButtonsInfos>
                         <LinkIds to={`/followers/${id}`}>
@@ -141,6 +204,28 @@ const MyInfos = styled.div`
     background-color: #387ebc;
     box-sizing: border-box;
 `;
+const NameButton = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 10px;
+    h2{
+        display: flex;
+        align-items: center;
+        color: red;
+    }
+    button {
+        padding: 5px;
+        border-radius: 5px;
+        border: 0px;
+        background-color: ${(props) => props.val === true ? "#ec1b90" : "#bbbbbb"};
+        color: #ffffff;
+        font-family: 'Roboto', sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        width: 120px;
+    }
+`;
 const InfoLeft = styled.div`
     display: flex;
     justify-content: flex-start;
@@ -189,7 +274,7 @@ const ButtonsInfos = styled.div`
         font-family: 'Roboto', sans-serif;
         font-size: 15px;
         font-weight: 500;
-        width: 92px;;
+        width: 92px;       
     }
 `;
 const Content = styled.div`
