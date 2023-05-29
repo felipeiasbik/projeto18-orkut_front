@@ -43,6 +43,19 @@ export default function HomePage() {
         setForm({...form, [e.target.name]: e.target.value});
     }
 
+    useEffect(() => {
+
+    const {token} = JSON.parse(localStorage.getItem('user'));
+        apiLikes.getLikes(token)
+            .then( res => {                
+                setToLikes(res.data);
+                })
+                .catch( err => {
+                    alert(`Erro: ${err.response.data}`)
+                })
+        // eslint-disable-next-line
+    },[toLikes]);
+
     function commentPost(e, postId){
         e.preventDefault();
 
@@ -75,7 +88,8 @@ export default function HomePage() {
                 }
                 apiLikes.likePosts(body, token.token)
                     .then( res => {
-                        window.location.reload();
+                        // window.location.reload();
+                        console.log("ok");
                     })
                     .catch( err => {
                         alert(`Erro: ${err.response.data}`)
