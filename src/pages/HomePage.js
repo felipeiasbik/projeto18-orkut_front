@@ -89,7 +89,7 @@ export default function HomePage() {
                 apiLikes.likePosts(body, token.token)
                     .then( res => {
                         // window.location.reload();
-                        console.log("ok");
+                        console.log("Like/dislike");
                     })
                     .catch( err => {
                         alert(`Erro: ${err.response.data}`)

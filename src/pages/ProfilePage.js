@@ -132,6 +132,19 @@ export default function ProfilePage() {
         }
       }
 
+      useEffect(() => {
+
+        const {token} = JSON.parse(localStorage.getItem('user'));
+            apiLikes.getLikes(token)
+                .then( res => {                
+                    setToLikes(res.data);
+                    })
+                    .catch( err => {
+                        alert(`Erro: ${err.response.data}`)
+                    })
+            // eslint-disable-next-line
+        },[toLikes]);
+
       function handleLikeClick(postId) {
         // const toLikeSend = ((prevLikes) => ({
         //   ...prevLikes,
@@ -149,7 +162,7 @@ export default function ProfilePage() {
                 }
                 apiLikes.likePosts(body, tokenA.token)
                     .then( res => {
-                        window.location.reload();
+                        console.log("Like/dislike");
                     })
                     .catch( err => {
                         alert(`Erro: ${err.response.data}`)
