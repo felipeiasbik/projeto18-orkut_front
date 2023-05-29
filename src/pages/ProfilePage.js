@@ -6,6 +6,8 @@ import apiHome from "../services/apiHome.js";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import apiFollow from "../services/apiFollow.js";
+import apiPosts from "../services/apiPosts.js";
+import apiLikes from "../services/apiLikes.js";
 
 export default function ProfilePage() {
 
@@ -16,6 +18,9 @@ export default function ProfilePage() {
     const [followingUsers, setFollowingUsers] = useState(null);
     const [currentId, setCurrentId] = useState(id);
     const [tokenA, setTokenA] = useState({});
+    const [form, setForm] = useState({postId: "", comment: ""});
+    const [refreshComments, setRefreshComments] = useState(false);
+    const [toLikes, setToLikes] = useState([]);
 
     useEffect(()=> {
 
@@ -35,12 +40,19 @@ export default function ProfilePage() {
             
             apiFollow.following(idUser, token)
             .then( res => {
-                console.log(res.data);
                 setFollowingUsers(res?.data.following && res.data.following.map(v => v.id));
             })
             .catch( err => {
                 alert(`Erro: ${err.response.data}`)
             });
+
+            apiLikes.getLikes(token)
+            .then( res => {                
+                setToLikes(res.data);
+                })
+                .catch( err => {
+                    alert(`Erro: ${err.response.data}`)
+                })
             
         } else {
             navigate("/signin");
@@ -54,7 +66,6 @@ export default function ProfilePage() {
 
         if (currentId !== id) {
           setCurrentId(id);
-          console.log(tokenA.token)
           apiHome.profile(id, tokenA.token)
                 .then( res => {
                     setMyTimeLine(res.data);
@@ -70,35 +81,85 @@ export default function ProfilePage() {
             //     alert(`Erro: ${err.response.data}`)
             // });
         }
-      }, [id, currentId, followingUsers]);
+    // eslint-disable-next-line
+    }, [id, currentId, followingUsers]);
 
+    function handleForm(e){
+    setForm({...form, [e.target.name]: e.target.value});
+    }
 
-      function handleClick(){
+    function commentPost(e, postId){
+        e.preventDefault();
+
+        const body = {postId, comment: form.comment};
+
+        apiPosts.postComent(body, tokenA.token)
+            .then( res => {
+                setRefreshComments(!refreshComments);
+                setForm("");
+                window.location.reload();
+            })
+            .catch( err => {
+                alert(`Erro: ${err.response.data}`)
+            })
+    }
+
+    function handleClick(){
         window.scrollTo(0, 0);
-        console.log(followingUsers)
-            if(followingUsers?.includes(myTimeLine?.id) === false || followingUsers === null){
-                const body = { userFollowId: currentId };
-                apiFollow.followUser(body,tokenA.token)
-                .then( res => {
-                    const myFollowers = res.data.myFollowers || [];
-                    // setFollowingUsers(myFollowers.map(v => v.id));
-                    window.location.reload();
-                })
-                .catch( err => {
-                    alert(`Erro: ${err.response.data}`)
-                });
 
-            } else {
-                apiFollow.unfollowUser(id,tokenA.token)
-                .then( res => {
-                        const myFollowers = res.data.myFollowers || [];
-                        // setFollowingUsers(myFollowers.map(v => v.id));
+        if(followingUsers?.includes(myTimeLine?.id) === false || followingUsers === null){
+            const body = { userFollowId: currentId };
+            apiFollow.followUser(body,tokenA.token)
+            .then( res => {
+                const myFollowers = res.data.myFollowers || [];
+                setFollowingUsers(myFollowers.map(v => v.id));
+                window.location.reload();
+            })
+            .catch( err => {
+                alert(`Erro: ${err.response.data}`)
+            });
+
+        } else {
+            apiFollow.unfollowUser(id,tokenA.token)
+            .then( res => {
+                    const myFollowers = res.data.myFollowers || [];
+                    setFollowingUsers(myFollowers.map(v => v.id));
+                    window.location.reload();
+            })
+            .catch( err => {
+                alert(`Erro: ${err.response.data}`)
+            });
+        }
+      }
+
+      function handleLikeClick(postId) {
+        // const toLikeSend = ((prevLikes) => ({
+        //   ...prevLikes,
+        //   [postId]: !prevLikes[postId],
+        // }));
+        // setToLikes(toLikeSend);
+        
+        apiLikes.getLikes(tokenA.token)
+            .then( res => {
+                let body = {};
+                if (res.data.includes(postId)){
+                    body = {postId: Number(postId), like: false};
+                } else {
+                    body = {postId: Number(postId), like: true};
+                }
+                apiLikes.likePosts(body, tokenA.token)
+                    .then( res => {
                         window.location.reload();
-                })
-                .catch( err => {
-                    alert(`Erro: ${err.response.data}`)
-                });
-            }
+                    })
+                    .catch( err => {
+                        alert(`Erro: ${err.response.data}`)
+                    })
+                const likes = res.data;
+                setToLikes(likes);
+            })
+            .catch( err => {
+                alert(`Erro: ${err.response.data}`)
+            })        
       }
 
     return (
@@ -138,9 +199,8 @@ export default function ProfilePage() {
                     </InfoDate>
                 </UserInfo>
                 <LikesInfo>
-                    <button >
-                        <ion-icon name="star-outline"></ion-icon>
-                    </button>
+                    <ion-icon onClick={() => handleLikeClick(id)} 
+                    name={toLikes.includes(id) ? "star" : "star-outline"}></ion-icon>
                     <p>{
                     likes !== null ? 
                     (likes.length >1 ? (
@@ -162,8 +222,17 @@ export default function ProfilePage() {
                 </LikesInfo>
                 <DescriptionP>{description}</DescriptionP>
                 <CommentsInfo>
-                    <textarea placeholder="Comentar algo" name="comment"  type="text" required/>
-                    <ion-icon name="paper-plane"></ion-icon>
+                    <form onSubmit={(e) => commentPost(e, id)}>
+                        <textarea 
+                        key={id} 
+                        placeholder="Comentar algo" 
+                        name="comment" 
+                        type="text" 
+                        value={form[id]?.comment} 
+                        onChange={(e) => handleForm(e, id)} 
+                        required/>
+                        <button type="submit"><ion-icon name="paper-plane"></ion-icon></button>
+                    </form>
                     {comments !== null && comments.map(({commentId, comment, userName, userId, userPhoto}) => (
                     <CommentInt key={commentId}>
                         <LinkIds to={`/profile/${userId}`}>
@@ -390,11 +459,15 @@ const CommentsInfo = styled.div`
         color: #a2b9cc;
     }
     ion-icon {
+        font-size: 20px;
+        color: #d4ddee;
+    }
+    button{
         position: absolute;
         right: 15px;
         margin-top: 15px;
-        font-size: 20px;
-        color: #d4ddee;
+        background-color: transparent;
+        border: 0;
     }
 `;
 const CommentInt = styled.div`

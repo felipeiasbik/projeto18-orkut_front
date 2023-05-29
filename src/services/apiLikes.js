@@ -15,5 +15,10 @@ function likePosts(body, token){
     return promise;
 }
 
-const apiLikes= { likePosts };
+function getLikes(token){
+    const promise = axios.get(`/likes`, createConfig(token));
+    return promise;
+}
+
+const apiLikes= { likePosts, getLikes };
 export default apiLikes;

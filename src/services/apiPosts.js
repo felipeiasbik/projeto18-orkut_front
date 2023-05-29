@@ -15,5 +15,10 @@ function postImage(body, token){
     return promise;
 }
 
-const apiPosts= { postImage };
+function postComent(body, token){
+    const promise = axios.post(`/comments`, body, createConfig(token));
+    return promise;
+}
+
+const apiPosts= { postImage, postComent };
 export default apiPosts;
