@@ -56,6 +56,19 @@ export default function HomePage() {
         // eslint-disable-next-line
     },[toLikes]);
 
+    useEffect(() => {
+
+        const {token} = JSON.parse(localStorage.getItem('user'));
+            apiHome.homePage(token)
+                .then( res => {
+                    setTimeLine(res.data);
+                })
+                .catch( err => {
+                    alert(`Erro: ${err.response.data}`)
+                });
+            // eslint-disable-next-line
+        },[form]);
+
     function commentPost(e, postId){
         e.preventDefault();
 
@@ -63,8 +76,8 @@ export default function HomePage() {
 
         apiPosts.postComent(body, token.token)
             .then( res => {
-                setForm("");
-                window.location.reload();
+                setForm({ ...form, comment: "" });
+                // window.location.reload();
             })
             .catch( err => {
                 alert(`Erro: ${err.response.data}`)
