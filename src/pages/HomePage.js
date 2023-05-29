@@ -241,9 +241,10 @@ const LikesInfo = styled.div`
         border-radius: 50%;
     }
     ion-icon {
-        font-size: 26px;
+        font-size: 22px;
         min-width: 30px;
-        margin-top: -4px;
+        margin-top: -1px;
+        color: #fcdf03;
     }
     p{
         margin-top: 4px;

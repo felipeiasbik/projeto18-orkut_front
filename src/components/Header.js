@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Header(){
     return (
-        <Content to={"/"}>Orkut</Content>
+        <Content to={"/"}><h3>new</h3>Orkut</Content>
     );
 }
 const Content = styled(Link)`
@@ -23,4 +23,11 @@ const Content = styled(Link)`
     top: 0;
     left: 0;
     z-index: 1;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+   -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+   -moz-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+    h3{
+    margin-top: 10px;
+    font-size: 15px;
+    }
 `;
