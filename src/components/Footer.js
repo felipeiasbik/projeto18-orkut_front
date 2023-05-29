@@ -1,20 +1,13 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import apiAuth from "../services/apiAuth.js";
 import { useNavigate } from "react-router";
 
 export function Footer({myId}){
     const navigate = useNavigate();
 
     function logoutClick(){
-        apiAuth.logOut(myId.token)
-            .then(res => {
-                navigate("/signin");
-                localStorage.removeItem("user");
-            })
-            .catch( err => {
-                alert(`Erro: ${err.response.data}`)
-            });
+        localStorage.removeItem("user");
+        navigate("/logout");    
     }
 
     return (

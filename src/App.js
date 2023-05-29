@@ -3,6 +3,7 @@ import styled from "styled-components";
 import HomePage from "./pages/HomePage.js";
 import SignUpPage from "./pages/SignUpPage.js";
 import SignInPage from "./pages/SignInPage.js";
+import LogoutPage from "./pages/LogoutPage.js";
 import ProfilePage from "./pages/ProfilePage.js";
 import FollowersPage from "./pages/FollowersPage.js";
 import FollowingPage from "./pages/FollowingPage.js";
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/signin" element={<SignInPage />} />
+          <Route path="/logout" element={<LogoutPage />} />
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/followers/:id" element={<FollowersPage />} />
           <Route path="/following/:id" element={<FollowingPage />} />
