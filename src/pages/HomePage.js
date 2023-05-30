@@ -57,19 +57,6 @@ export default function HomePage() {
         // eslint-disable-next-line
     },[toLikes]);
 
-    useEffect(() => {
-
-        const {token} = JSON.parse(localStorage.getItem('user'));
-            apiHome.homePage(token)
-                .then( res => {
-                    setTimeLine(res.data);
-                })
-                .catch( err => {
-                    alert(`Erro: ${err.response.data}`)
-                });
-            // eslint-disable-next-line
-        },[refresh, form]);
-
     function commentPost(e, postId){
         e.preventDefault();
 
@@ -107,6 +94,19 @@ export default function HomePage() {
                 alert(`Erro: ${err.response.data}`)
             })        
       }
+
+    useEffect(() => {
+
+        const {token} = JSON.parse(localStorage.getItem('user'));
+            apiHome.homePage(token)
+                .then( res => {
+                    setTimeLine(res.data);
+                })
+                .catch( err => {
+                    alert(`Erro: ${err.response.data}`)
+                });
+            // eslint-disable-next-line
+        },[refresh, form]);
 
     return (
         <HomeContainer>
