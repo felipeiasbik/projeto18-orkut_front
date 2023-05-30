@@ -106,9 +106,7 @@ export default function ProfilePage() {
             .catch( err => {
                 alert(`Erro: ${err.response.data}`)
             })
-    }
-
-    
+    }    
 
     function handleClick(){
         window.scrollTo(0, 0);
@@ -152,11 +150,6 @@ export default function ProfilePage() {
         },[toLikes]);
 
       function handleLikeClick(postId) {
-        // const toLikeSend = ((prevLikes) => ({
-        //   ...prevLikes,
-        //   [postId]: !prevLikes[postId],
-        // }));
-        // setToLikes(toLikeSend);
         
         apiLikes.getLikes(tokenA.token)
             .then( res => {
@@ -168,13 +161,11 @@ export default function ProfilePage() {
                 }
                 apiLikes.likePosts(body, tokenA.token)
                     .then( res => {
-                        console.log("Like/dislike");
+                        setRefresh(!refresh);
                     })
                     .catch( err => {
                         alert(`Erro: ${err.response.data}`)
                     })
-                const likes = res.data;
-                setToLikes(likes);
             })
             .catch( err => {
                 alert(`Erro: ${err.response.data}`)

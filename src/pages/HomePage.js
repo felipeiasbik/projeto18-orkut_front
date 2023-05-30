@@ -86,12 +86,7 @@ export default function HomePage() {
     }
 
     function handleLikeClick(postId) {
-        // const toLikeSend = ((prevLikes) => ({
-        //   ...prevLikes,
-        //   [postId]: !prevLikes[postId],
-        // }));
-        // setToLikes(toLikeSend);
-        
+
         apiLikes.getLikes(token.token)
             .then( res => {
                 let body = {};
@@ -102,14 +97,11 @@ export default function HomePage() {
                 }
                 apiLikes.likePosts(body, token.token)
                     .then( res => {
-                        // window.location.reload();
-                        console.log("Like/dislike");
+                        setRefresh(!refresh); 
                     })
                     .catch( err => {
                         alert(`Erro: ${err.response.data}`)
                     })
-                const likes = res.data;
-                setToLikes(likes);
             })
             .catch( err => {
                 alert(`Erro: ${err.response.data}`)
