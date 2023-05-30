@@ -197,8 +197,8 @@ export default function ProfilePage() {
                     </ButtonsInfos>
                 </InfoRight>
             </MyInfos>
-            {!myTimeLine?.posts 
-            ? `${myTimeLine?.name} ainda não fez publicações.`
+            {(!myTimeLine?.posts && myTimeLine?.name !== undefined)
+            ? `${(myTimeLine?.name !== undefined && myTimeLine?.name)} ainda não fez publicações.`
             : myTimeLine?.posts.map(({id, photo, description, createdAt, likes, comments}) => (
             <Content key={id}>
                 <span></span>
