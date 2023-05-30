@@ -137,15 +137,15 @@ export default function HomePage() {
                     (likes.length >1 ? (
                         <>
                           Curtido por 
-                            <LinkIds to={`/profile/${likes[likes.length-1].id}`}>
-                                {` ${likes[likes.length-1].name}`}
+                            <LinkIds to={`/profile/${likes[0].id}`}>
+                                {` ${likes[0].name}`}
                             </LinkIds> e mais {likes.length - 1} {likes.length === 2 ? "pessoa" : "pessoas"}
                         </>
                       )
                       : <>
                         Curtido por 
-                            <LinkIds to={`/profile/${likes[likes.length-1].id}`}>
-                                {` ${likes[likes.length-1].name}`}
+                            <LinkIds to={`/profile/${likes[0].id}`}>
+                                {` ${likes[0].name}`}
                             </LinkIds>
                         </>)
                     : "Ninguém curtiu ainda."

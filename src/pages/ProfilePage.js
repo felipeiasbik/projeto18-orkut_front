@@ -88,7 +88,7 @@ export default function ProfilePage() {
                         setMyTimeLine(res.data);
                     })
                     .catch( err => {
-                        alert(`Erroaa: ${err.response.data}`)
+                        alert(`Erro: ${err.response.data}`)
                     });
                 // eslint-disable-next-line
             },[refresh,form]);
@@ -216,15 +216,15 @@ export default function ProfilePage() {
                     (likes.length >1 ? (
                         <>
                           Curtido por 
-                            <LinkIds to={`/profile/${likes[likes.length-1].id}`}>
-                                {` ${likes[likes.length-1].name}`}
+                            <LinkIds to={`/profile/${likes[0].id}`}>
+                                {` ${likes[0].name}`}
                             </LinkIds> e mais {likes.length - 1} {likes.length === 2 ? "pessoa" : "pessoas"}
                         </>
                       )
                       : <>
                         Curtido por 
-                            <LinkIds to={`/profile/${likes[likes.length-1].id}`}>
-                                {` ${likes[likes.length-1].name}`}
+                            <LinkIds to={`/profile/${likes[0].id}`}>
+                                {` ${likes[0].name}`}
                             </LinkIds>
                         </>)
                     : "Ninguém curtiu ainda."
