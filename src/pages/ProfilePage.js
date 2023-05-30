@@ -19,7 +19,7 @@ export default function ProfilePage() {
     const [currentId, setCurrentId] = useState(id);
     const [tokenA, setTokenA] = useState({});
     const [form, setForm] = useState({postId: "", comment: ""});
-    const [refreshComments, setRefreshComments] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const [toLikes, setToLikes] = useState([]);
 
     useEffect(()=> {
@@ -73,13 +73,6 @@ export default function ProfilePage() {
                 .catch( err => {
                     alert(`Erro: ${err.response.data}`)
                 });
-            // apiFollow.following(id,tokenA.token)
-            // .then( res => {
-            //     setFollowingUsers(res.data.following && res.data.following.map(v => v.id));
-            // })
-            // .catch( err => {
-            //     alert(`Erro: ${err.response.data}`)
-            // });
         }
     // eslint-disable-next-line
     }, [id, currentId, followingUsers]);
@@ -87,18 +80,18 @@ export default function ProfilePage() {
     function handleForm(e){
     setForm({...form, [e.target.name]: e.target.value});
     }
-  
-    useEffect(() => {
-        const {token} = JSON.parse(localStorage.getItem('user'));
-            apiHome.profile(id, token)
-                .then( res => {
-                    setMyTimeLine(res.data);
-                })
-                .catch( err => {
-                    alert(`Erroaa: ${err.response.data}`)
-                });
-            // eslint-disable-next-line
-        },[,form]);
+    
+        useEffect(() => {
+            const {token} = JSON.parse(localStorage.getItem('user'));
+                apiHome.profile(id, token)
+                    .then( res => {
+                        setMyTimeLine(res.data);
+                    })
+                    .catch( err => {
+                        alert(`Erroaa: ${err.response.data}`)
+                    });
+                // eslint-disable-next-line
+            },[refresh,form]);
 
     function commentPost(e, postId){
         e.preventDefault();
@@ -107,14 +100,15 @@ export default function ProfilePage() {
 
         apiPosts.postComent(body, tokenA.token)
             .then( res => {
-                setRefreshComments(!refreshComments);
-                setForm("");
-                // window.location.reload();
+                setRefresh(!refresh);
+                e.target[0].value = "";
             })
             .catch( err => {
                 alert(`Erro: ${err.response.data}`)
             })
     }
+
+    
 
     function handleClick(){
         window.scrollTo(0, 0);

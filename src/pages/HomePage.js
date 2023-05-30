@@ -15,6 +15,7 @@ export default function HomePage() {
     const [token, setToken] = useState({});
     const [form, setForm] = useState({postId: "", comment: ""});
     const [toLikes, setToLikes] = useState([]);
+    const [refresh, setRefresh] = useState(false);
       
     useEffect(()=> {
 		if(localStorage.getItem('user')){
@@ -67,7 +68,7 @@ export default function HomePage() {
                     alert(`Erro: ${err.response.data}`)
                 });
             // eslint-disable-next-line
-        },[form]);
+        },[refresh, form]);
 
     function commentPost(e, postId){
         e.preventDefault();
@@ -76,8 +77,8 @@ export default function HomePage() {
 
         apiPosts.postComent(body, token.token)
             .then( res => {
-                setForm({ ...form, comment: "" });
-                // window.location.reload();
+                setRefresh(!refresh);                
+                e.target[0].value = "";
             })
             .catch( err => {
                 alert(`Erro: ${err.response.data}`)
