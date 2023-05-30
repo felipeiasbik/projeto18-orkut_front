@@ -81,18 +81,6 @@ export default function ProfilePage() {
     setForm({...form, [e.target.name]: e.target.value});
     }
     
-        useEffect(() => {
-            const {token} = JSON.parse(localStorage.getItem('user'));
-                apiHome.profile(id, token)
-                    .then( res => {
-                        setMyTimeLine(res.data);
-                    })
-                    .catch( err => {
-                        alert(`Erro: ${err.response.data}`)
-                    });
-                // eslint-disable-next-line
-            },[refresh,form]);
-
     function commentPost(e, postId){
         e.preventDefault();
 
@@ -171,6 +159,18 @@ export default function ProfilePage() {
                 alert(`Erro: ${err.response.data}`)
             })        
       }
+
+      useEffect(() => {
+        const {token} = JSON.parse(localStorage.getItem('user'));
+            apiHome.profile(id, token)
+                .then( res => {
+                    setMyTimeLine(res.data);
+                })
+                .catch( err => {
+                    alert(`Erro: ${err.response.data}`)
+                });
+            // eslint-disable-next-line
+        },[refresh,form]);
 
     return (
         <HomeContainer>
