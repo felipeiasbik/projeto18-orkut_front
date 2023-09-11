@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# new Orkut (Front-end) 
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Logo_ORKUT.svg/1200px-Logo_ORKUT.svg.png" alt="new Orkut Logo" height="40">
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+##### Neste repositório você encontrará a interface de usuário para a rede social new Orkut. A plataforma possui todas as principais ferramentas de uma rede social convencional. Este repositório contém o código-fonte do front-end do projeto.
 
-## Available Scripts
+### Visão Geral
 
-In the project directory, you can run:
+O new Orkut é um "remake" do antigo Orkut, com um layout pensado para telas mobile. Ele mantém as cores tradicionais, alinhado a um design mais atual. Os usuários podem seguir uns aos outros, comentar, publicar, entre outras funções.
 
-### `npm start`
+Este projeto foi desenvolvido por:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [Felipe Iasbik](https://github.com/felipeiasbik)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Principais recursos:
 
-### `npm test`
+- Registro, login e logout de usuários;
+- Publicar fotos com legendas;
+- Comentar em publicações próprias ou de outros usuários;
+- Seguir usuários;
+- Curtir publicações;
+- Realizar buscas por usuários;
+- Visualizar perfis de usuários e suas publicações;
+- Visualizar quem usuário segue ou é seu seguidor.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<br />
+<img alt="Linkr" max-width="50%" src="https://github.com/felipeiasbik/linkr-frontend/blob/main/public/linkr-post-tt.gif?raw=true" />
+<br />
+Para ver como ficou o projeto, basta acessar o link abaixo:
 
-### `npm run build`
+[Linkr](projeto18-orkut-front.vercel.app)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Vale a ressalva de que o acesso pode ser um pouco lento devido ao backend estar hospedado em uma plataforma gratuita. Mas tenha paciência :)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Como utilizar:
+- Clone o repositório
+- Digite o seguinte comando na raíz do projeto:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  ```
+  npm i
+  ```
+- Crie um arquivo .env
+- Crie uma variável de ambiente chamada REACT_APP_API_URL e utilize a nossa API pública.
+- O seu arquivo .env deverá ficar da seguinte forma:
 
-### `npm run eject`
+```
+REACT_APP_API_URL=https://orkut-api.onrender.com
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### OBRIGADO PELA VISITA :D
