@@ -1,9 +1,9 @@
 # new Orkut (Front-end) 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Logo_ORKUT.svg/1200px-Logo_ORKUT.svg.png" alt="new Orkut Logo" height="40">
 
-<img width="30%" alt="New Orkut" src="https://github.com/felipeiasbik/projeto18-orkut_front/blob/main/public/neworkut.gif?raw=true" />
-
 ##### Neste repositório você encontrará a interface de usuário para a rede social new Orkut. A plataforma possui todas as principais ferramentas de uma rede social convencional. Este repositório contém o código-fonte do front-end do projeto.
+
+<img width="30%" alt="New Orkut" src="https://github.com/felipeiasbik/projeto18-orkut_front/blob/main/public/neworkut.gif?raw=true" />
 
 ### Visão Geral
 
