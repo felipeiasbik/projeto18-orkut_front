@@ -24,7 +24,7 @@ Este projeto foi desenvolvido por:
 - Visualizar perfis de usuários e suas publicações;
 - Visualizar quem usuário segue ou é seu seguidor.
   
-Para ver como ficou o projeto, basta acessar o link: [new Orkut](projeto18-orkut-front.vercel.app)
+Para ver como ficou o projeto, basta acessar o link: [new Orkut](https://projeto18-orkut-front.vercel.app)
 
 Vale a ressalva de que o acesso pode ser um pouco lento devido ao backend estar hospedado em uma plataforma gratuita. Mas tenha paciência :)
 
