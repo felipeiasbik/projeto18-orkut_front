@@ -1,6 +1,8 @@
 # new Orkut (Front-end) 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Logo_ORKUT.svg/1200px-Logo_ORKUT.svg.png" alt="new Orkut Logo" height="40">
 
+<img width="30%" alt="New Orkut" src="https://github.com/felipeiasbik/projeto18-orkut_front/blob/main/public/neworkut.gif?raw=true" />
+
 ##### Neste repositório você encontrará a interface de usuário para a rede social new Orkut. A plataforma possui todas as principais ferramentas de uma rede social convencional. Este repositório contém o código-fonte do front-end do projeto.
 
 ### Visão Geral
@@ -11,7 +13,7 @@ Este projeto foi desenvolvido por:
 
 - [Felipe Iasbik](https://github.com/felipeiasbik)
 
-### Principais recursos:
+##### Principais recursos:
 
 - Registro, login e logout de usuários;
 - Publicar fotos com legendas;
@@ -21,13 +23,8 @@ Este projeto foi desenvolvido por:
 - Realizar buscas por usuários;
 - Visualizar perfis de usuários e suas publicações;
 - Visualizar quem usuário segue ou é seu seguidor.
-
-<br />
-<img alt="Linkr" max-width="50%" src="https://github.com/felipeiasbik/linkr-frontend/blob/main/public/linkr-post-tt.gif?raw=true" />
-<br />
-Para ver como ficou o projeto, basta acessar o link abaixo:
-
-[Linkr](projeto18-orkut-front.vercel.app)
+  
+Para ver como ficou o projeto, basta acessar o link: [new Orkut](projeto18-orkut-front.vercel.app)
 
 Vale a ressalva de que o acesso pode ser um pouco lento devido ao backend estar hospedado em uma plataforma gratuita. Mas tenha paciência :)
 
