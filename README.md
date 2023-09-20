@@ -3,6 +3,8 @@
 
 ##### Neste repositório você encontrará a interface de usuário para a rede social new Orkut. A plataforma possui todas as principais ferramentas de uma rede social convencional. Este repositório contém o código-fonte do front-end do projeto.
 
+##### Algumas tecnologias usadas no projeto: *React, Styled-Components, Axios, Day.js*.
+<br />
 <img width="30%" alt="New Orkut" src="https://github.com/felipeiasbik/projeto18-orkut_front/blob/main/public/neworkut.gif?raw=true" />
 
 ### Visão Geral
